@@ -44,6 +44,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:backgroundTint="@android:color/darker_gray"
+        app:srcCompat="@android:drawable/ic_lock_idle_alarm"
+
+
+        />
 
 </android.support.design.widget.CoordinatorLayout>
