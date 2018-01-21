@@ -1,35 +1,27 @@
 package com.example.derekdesktop.assign42017derekaherne;
 
-import android.content.ContextWrapper;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
-import android.net.Uri;
 import android.provider.AlarmClock;
+import android.provider.CalendarContract;
 import android.provider.MediaStore;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.FileProvider;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,12 +34,14 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    int tab;
+
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private static final int id = 110001;
+    NotificationCompat.Builder notify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        //mViewPager.setLayoutParams(new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT));
-        /// mViewPager.;
+
+        notify= new NotificationCompat.Builder(this);
+        notify.setAutoCancel(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +116,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        /** Citation: Class contains code adapted from
+         * URL: //https://stackoverflow.com/questions/28342181/show-menu-items-depending-viewpager-android
+         * Permission: MIT Licence Retrieved on:21th January 2018  */
+
         getMenuInflater().inflate(R.menu.order_menu, menu);
         if (mViewPager.getCurrentItem()==0){
             menu.findItem(R.id.action_share).setVisible(false);
@@ -138,14 +137,32 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.action_settings:
                 // User chose the "Settings" item, show the app settings UI...
+                notify.setSmallIcon(R.drawable.lipstick);
+                notify.setTicker("This is ticker");
+                notify.setWhen(System.currentTimeMillis());
+                notify.setContentTitle("DCU Chemist");
+                notify.setContentText("Set your refill date!");
+
+                Intent intent = new Intent(Intent.ACTION_INSERT);
+                intent.setType("vnd.android.cursor.item/event");
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                notify.setContentIntent(pendingIntent);
+
+                //Build notification and issue
+                NotificationManager nm=  (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                nm.notify(id,notify.build());
+
                 return true;
 
             case R.id.action_share:
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                Toast.makeText(getApplicationContext(),"Share", Toast.LENGTH_LONG).show();
                 return true;
 
             default:
