@@ -1,10 +1,16 @@
 package com.example.derekdesktop.assign42017derekaherne;
 
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.AlarmClock;
+import android.provider.MediaStore;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -19,8 +25,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,24 +65,28 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        //mViewPager.setLayoutParams(new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT));
+        /// mViewPager.;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //startTimer("I can set a timer",10,true);
+              startTimer("I can set a timer",10,true);
 
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                 //       .setAction("Action", null).show();
             }
         });
+
+
 
     }
 
     public void startTimer(String message, int seconds, boolean skipui) {
         //https://developer.android.com/guide/components/intents-common.html
         Intent intent = new Intent(AlarmClock.ACTION_SET_TIMER);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         intent.putExtra(AlarmClock.EXTRA_MESSAGE, message);
         intent.putExtra(AlarmClock.EXTRA_LENGTH, seconds);
         intent.putExtra(AlarmClock.EXTRA_SKIP_UI, skipui);
@@ -90,7 +103,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+        //return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
