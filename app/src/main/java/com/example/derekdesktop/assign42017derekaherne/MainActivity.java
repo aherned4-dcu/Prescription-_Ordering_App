@@ -1,11 +1,11 @@
 package com.example.derekdesktop.assign42017derekaherne;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.provider.AlarmClock;
-import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -17,10 +17,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import static android.provider.CalendarContract.CalendarCache.URI;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -68,10 +72,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              startTimer("I can set a timer",10,true);
-
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                 //       .setAction("Action", null).show();
+              startTimer("I can set a timer",10,false);
             }
         });
 
@@ -91,13 +92,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
-
     }
 
     public void startTimer(String message, int seconds, boolean skipui) {
-        //https://developer.android.com/guide/components/intents-common.html
+
+        /** Citation: Class contains code adapted from
+         * URL: //https://developer.android.com/guide/components/intents-common.html
+         * Permission: MIT Licence Retrieved on:21th January 2018  */
+
         Intent intent = new Intent(AlarmClock.ACTION_SET_TIMER);
 
         intent.putExtra(AlarmClock.EXTRA_MESSAGE, message);
@@ -116,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+
         /** Citation: Class contains code adapted from
          * URL: //https://stackoverflow.com/questions/28342181/show-menu-items-depending-viewpager-android
          * Permission: MIT Licence Retrieved on:21th January 2018  */
@@ -138,14 +141,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        /** Citation: Class contains code adapted from
+         * URL: //https://developer.android.com/guide/components/intents-common.html
+         * Permission: MIT Licence Retrieved on:21th January 2018  */
+
         switch (item.getItemId()) {
             case R.id.action_settings:
-                // User chose the "Settings" item, show the app settings UI...
+                // User chose the "Send" icon...
                 notify.setSmallIcon(R.drawable.lipstick);
                 notify.setTicker("This is ticker");
                 notify.setWhen(System.currentTimeMillis());
                 notify.setContentTitle("DCU Chemist");
                 notify.setContentText("Set your refill date!");
+                Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                notify.setSound(alarmSound);
 
                 Intent intent = new Intent(Intent.ACTION_INSERT);
                 intent.setType("vnd.android.cursor.item/event");
@@ -160,9 +169,32 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_share:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                Toast.makeText(getApplicationContext(),"Share", Toast.LENGTH_LONG).show();
+                // User chose the "Share" action
+                //extract text from EditText fields
+                /** Citation: Class contains code adapted from
+                   https://stackoverflow.com/questions/2197741/how-can-i-send-emails-from-my-android-application
+                 * Permission: MIT Licence Retrieved on:25th Ddecember 2017  */
+
+                //Capture the text
+                TextView textViewName = (TextView) findViewById(R.id.name);
+                TextView textViewInfo = (TextView) findViewById(R.id.otherInfo);
+
+                Spinner spinner = (Spinner) findViewById(R.id.spinner_time);
+                String selected = spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString();
+
+                String to = getString(R.string.email_recip);
+                String subject1 = getString(R.string.name) + ": " + textViewName.getText().toString() + "\n" + getString(R.string.add_inst) + ": " + textViewInfo.getText().toString() + "\n" + getString(R.string.coll_t) + ": " + selected;
+                //open an email app and set the fields using the text from the previous activity
+                Intent i = new Intent(Intent.ACTION_SENDTO);
+                i.setType("message/rfc822"); // ensure only email apps
+                i.setData(Uri.parse("mailto:" + to)); //recipient
+                i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject) + " " + textViewName.getText().toString()); //subject
+                i.putExtra(android.content.Intent.EXTRA_TEXT, subject1); //body
+                if (URI != null) {
+                    i.putExtra(Intent.EXTRA_STREAM, URI);
+                }
+                startActivity(Intent.createChooser(i, "Send mail..."));
+                Log.i(TAG, " inside share click");
                 return true;
 
             default:
