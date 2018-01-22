@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.provider.AlarmClock;
-import android.provider.MediaStore;
+import android.provider.CalendarContract;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
@@ -95,6 +95,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startTimer(String message, int seconds, boolean skipui) {
+        /**
+         * Info class extends Fragment
+         *Inflate the menu; this adds items to the action bar if it is present.
+         * @param String - A string message to display in timer
+         * @param Int - time in seconds for timer setting
+         * @param Boolean EXTRA_SKIP_UI
+         * @return Starts the activity
+         */
 
         /** Citation: Class contains code adapted from
          * URL: //https://developer.android.com/guide/components/intents-common.html
@@ -117,7 +125,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
+        /**
+         * Info class extends Fragment
+         * Starts an implied intent which opens a timer app
+         * @param menu
+         * @return Returns the menu objects
+         */
 
         /** Citation: Class contains code adapted from
          * URL: //https://stackoverflow.com/questions/28342181/show-menu-items-depending-viewpager-android
@@ -140,6 +154,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        /**
+         * Info class extends Fragment
+         * Creates a notification and calendar app
+         * Shares via an email app
+         * @param MenuItem - A string message to display in timer
+         *
+         * @return Boolean
+         */
 
         /** Citation: Class contains code adapted from
          * URL: //https://developer.android.com/guide/components/intents-common.html
@@ -156,7 +178,10 @@ public class MainActivity extends AppCompatActivity {
                 Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 notify.setSound(alarmSound);
 
-                Intent intent = new Intent(Intent.ACTION_INSERT);
+                Intent intent = new Intent(Intent.ACTION_INSERT)
+                        .putExtra(CalendarContract.Events.TITLE, "Refill Prescription\"")
+                        .putExtra(CalendarContract.Events.EVENT_LOCATION, "DCU Chemist");
+
                 intent.setType("vnd.android.cursor.item/event");
 
                 PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);

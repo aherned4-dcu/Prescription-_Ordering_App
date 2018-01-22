@@ -18,11 +18,14 @@ import android.widget.ImageView;
 
 import java.io.File;
 
-/**
- * Created by Derek desktop on 17/01/2018.
- */
+
 
 public class Order extends Fragment {
+    /**
+     * Order class extends Fragment
+     *
+     * @return the order layout is returned as a view.
+     */
     Uri URI = null;
     private static final int PICK_FROM_GALLERY = 101;
     public String photoFileName = "photo.jpg";

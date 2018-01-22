@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceScreen
+        android:title="Application Preferences"
+        >
+    </PreferenceScreen>
+    <EditTextPreference
+        android:title="Your Name"
+        android:summary="Set your name"
+        android:key="name"/>
+    <EditTextPreference
+        android:title="Your Password"
+        android:summary="Set your password"
+        android:key="password"/>
+    <EditTextPreference
+        android:title="Your Email"
+        android:summary="Set your email"
+        android:key="email"/>
+    <CheckBoxPreference
+        android:summary="Loyalty Card Holder"
+        android:key="loyal"/>
+</PreferenceScreen>
