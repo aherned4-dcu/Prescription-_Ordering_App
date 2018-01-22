@@ -2,6 +2,8 @@ Course : HDIP in SCi in Software Development Module Title: Software Development 
 
 Name: Derek Aherne GitHub account : aherned4-dcu
 
+repository :  https://github.com/aherned4-dcu/aherned4-assign4
+
 
 The purpose of this assignment is fourfold
 • To familiarize students with Advanced User Interface features and Design Patterns i.e.

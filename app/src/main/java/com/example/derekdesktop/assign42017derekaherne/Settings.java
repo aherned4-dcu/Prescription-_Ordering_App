@@ -2,6 +2,8 @@ package com.example.derekdesktop.assign42017derekaherne;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 public class Settings extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
